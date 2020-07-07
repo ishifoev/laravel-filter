@@ -22,7 +22,7 @@ window.Vue = require('vue');
 Vue.component('course-component', require('./components/courses/CourseComponent.vue').default);
 Vue.component('course', require('./components/courses/partials/Course.vue').default);
 Vue.component('pagination', require('./components/pagination/Pagination.vue').default);
-
+Vue.component('filters', require('./components/courses/partials/Filters.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

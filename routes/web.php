@@ -26,4 +26,5 @@ Route::get('/courses', function() {
 
 Route::group(['prefix' => '/api'], function(){
     Route::get('/courses', 'Api\Course\CourseController@index');
+    Route::get('/courses/filters', 'Api\Course\CourseController@filters');
 });

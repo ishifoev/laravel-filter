@@ -2,7 +2,7 @@
 <div class="container">
 <div class="row">
     <div class="col-sm-3">
-       filters
+       <filters endpoints="/api/courses/filters"></filters>
     </div>
 
     <div class="col-sm-9">
