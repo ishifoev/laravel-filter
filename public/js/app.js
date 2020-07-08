@@ -2003,6 +2003,17 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2014,7 +2025,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['endpoints'],
   data: function data() {
     return {
-      filters: {}
+      filters: {},
+      selectedFilters: {}
     };
   },
   mounted: function mounted() {
@@ -2023,6 +2035,14 @@ __webpack_require__.r(__webpack_exports__);
     axios.get(this.endpoints).then(function (response) {
       _this.filters = response.data.data;
     });
+  },
+  methods: {
+    activateFilter: function activateFilter(key, value) {
+      this.selectedFilters = Object.assign({}, this.selectedFilters, _defineProperty({}, key, value));
+      this.$router.replace({
+        query: _objectSpread({}, this.selectedFilters)
+      });
+    }
   }
 });
 
@@ -37752,21 +37772,33 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "filters" },
-    _vm._l(_vm.filters, function(map, key) {
-      return _c(
-        "div",
-        { staticClass: "list-group" },
-        _vm._l(map, function(filter, value) {
-          return _c(
-            "a",
-            { staticClass: "list-group-item", attrs: { href: "#" } },
-            [_vm._v(_vm._s(filter))]
-          )
-        }),
-        0
-      )
-    }),
-    0
+    [
+      _vm._v("\n    " + _vm._s(_vm.selectedFilters) + "\n   "),
+      _vm._l(_vm.filters, function(map, key) {
+        return _c(
+          "div",
+          { staticClass: "list-group" },
+          _vm._l(map, function(filter, value) {
+            return _c(
+              "a",
+              {
+                staticClass: "list-group-item",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.activateFilter(key, value)
+                  }
+                }
+              },
+              [_vm._v("\n        " + _vm._s(filter) + "\n        ")]
+            )
+          }),
+          0
+        )
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
