@@ -32,9 +32,7 @@ export default {
             this.$emit('pagination', page)
 
             this.$router.replace({
-                query: {
-                    page
-                }
+                query: Object.assign({}, this.$route.query, {page})
             })
         },
         pageIsOutOfBounds(page) {

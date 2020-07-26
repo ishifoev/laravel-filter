@@ -7,6 +7,11 @@
             v-for="filter, value in map" @click.prevent="activateFilter(key, value)">
             {{ filter }}
             </a>
+            <a href="#" 
+               class="list-group-item list-group-info" 
+               v-if="selectedFilters[key]
+               @click.prevent="clearFilter(key)"
+               ">&times; Clear this filter</a>
        </div>
     </div>
 </template>
@@ -32,9 +37,14 @@ export default {
           this.selectedFilters = Object.assign({ }, this.selectedFilters, { [key]: value })
           this.$router.replace({
               query: {
-                  ...this.selectedFilters
+                  ...this.selectedFilters,
+                  page: 1
               }
           })
+       },
+
+       clearFilter(key) {
+
        }
     }
 }

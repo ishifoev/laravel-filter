@@ -1908,6 +1908,19 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1942,15 +1955,24 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.getCourses();
   },
+  watch: {
+    '$route.query': {
+      handler: function handler(query) {
+        this.getCourses(1, query);
+      },
+      deep: true
+    }
+  },
   methods: {
     getCourses: function getCourses() {
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var query = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       axios.get('/api/courses', {
-        params: {
+        params: _objectSpread({
           page: page
-        }
+        }, query)
       }).then(function (response) {
         _this.courses = response.data.data;
         _this.meta = response.data.meta;
@@ -2021,6 +2043,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['endpoints'],
   data: function data() {
@@ -2040,9 +2067,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     activateFilter: function activateFilter(key, value) {
       this.selectedFilters = Object.assign({}, this.selectedFilters, _defineProperty({}, key, value));
       this.$router.replace({
-        query: _objectSpread({}, this.selectedFilters)
+        query: _objectSpread(_objectSpread({}, this.selectedFilters), {}, {
+          page: 1
+        })
       });
-    }
+    },
+    clearFilter: function clearFilter(key) {}
   }
 });
 
@@ -2088,9 +2118,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$emit('pagination', page);
       this.$router.replace({
-        query: {
+        query: Object.assign({}, this.$route.query, {
           page: page
-        }
+        })
       });
     },
     pageIsOutOfBounds: function pageIsOutOfBounds(page) {
@@ -37659,17 +37689,25 @@ var render = function() {
             "div",
             { staticClass: "card-body" },
             [
-              _vm._l(_vm.courses, function(course) {
-                return _c("course", {
-                  key: course.id,
-                  attrs: { course: course }
-                })
-              }),
-              _vm._v(" "),
-              _c("pagination", {
-                attrs: { meta: _vm.meta },
-                on: { pagination: _vm.getCourses }
-              })
+              _vm.courses.length
+                ? [
+                    _vm._l(_vm.courses, function(course) {
+                      return _c("course", {
+                        key: course.id,
+                        attrs: { course: course }
+                      })
+                    }),
+                    _vm._v(" "),
+                    _c("pagination", {
+                      attrs: { meta: _vm.meta },
+                      on: { pagination: _vm.getCourses }
+                    })
+                  ]
+                : [
+                    _vm._v(
+                      "\r\n                Not Results found\r\n            "
+                    )
+                  ]
             ],
             2
           )
@@ -37778,23 +37816,27 @@ var render = function() {
         return _c(
           "div",
           { staticClass: "list-group" },
-          _vm._l(map, function(filter, value) {
-            return _c(
-              "a",
-              {
-                staticClass: "list-group-item",
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.activateFilter(key, value)
+          [
+            _vm._l(map, function(filter, value) {
+              return _c(
+                "a",
+                {
+                  staticClass: "list-group-item",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.activateFilter(key, value)
+                    }
                   }
-                }
-              },
-              [_vm._v("\n        " + _vm._s(filter) + "\n        ")]
-            )
-          }),
-          0
+                },
+                [_vm._v("\n        " + _vm._s(filter) + "\n        ")]
+              )
+            }),
+            _vm._v(" "),
+            _vm._v('"\n           ">× Clear this filter')
+          ],
+          2
         )
       })
     ],
